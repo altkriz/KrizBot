@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Kriztech AI Assistant KrizBot</title>
 </head>
 <body>
 
