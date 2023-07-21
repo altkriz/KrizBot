@@ -4,7 +4,7 @@ function Send(prompt) {//Send Prompt to Bard API
     $.getJSON('https://blackearthauction.com/Bard/api?req=' + prompt + '&token=' + BardAPIKey, function (data) {
         var s = data.response;
         var ranNum = 1 + Math.floor(Math.random() * 6); //Random number
-        $('#mssg').append("<div class='direct-chat-msg'><div class='direct-chat-infos clearfix'><span class='direct-chat-name float-left'>KrizBot</span><span class='direct-chat-timestamp float-right'><a href='#' vall='"+s+"' class='text-primary play'><i class='fas fa-play-circle'></i></a></span></div><img class='direct-chat-img' src='img/neo.jpg' alt='Message User Image'><div id='"+ranNum+"' class='direct-chat-text'></div> </div>");
+        $('#mssg').append("<div class='direct-chat-msg'><div class='direct-chat-infos clearfix'><span class='direct-chat-name float-left'>KrizBot</span><span class='direct-chat-timestamp float-right'><a href='#' vall='"+s+"' class='text-primary play'><i class='fa fa-play-circle'></i></a></span></div><img class='direct-chat-img' src='img/neo.jpg' alt='Message User Image'><div id='"+ranNum+"' class='direct-chat-text'></div> </div>");
        typ(s,ranNum);
         $(".character-typing").hide();
         //Scroll to the answer
