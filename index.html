@@ -1,0 +1,207 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title> Your Assistant KrizBot |Bard AI</title>
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="img/Favicon.png" sizes="128x128">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/adminlte.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/Style.css" rel="stylesheet" type="text/css" />
+  <style>
+  .direct-chat-messages
+  {
+   min-height: 350px;
+    max-height: 350px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  .direct-chat-text
+{
+    white-space:pre-wrap;
+}
+.direct-chat-infos a
+{
+    font-size:1.2rem;
+}
+  </style>
+</head>
+<body onload="OnLoad()" class="hold-transition layout-top-nav">
+<div class="wrapper">
+<!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="img/AILogo.png" alt="AdminLTELogo" height="60" width="60">
+  </div>
+
+
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>I am your AI Assistant KrizBot  </h1>
+          </div>
+          <div class="col-sm-6">
+            
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+     <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-4">
+           <div class="card card-warning card-outline">
+              <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-cog"></i> Settings</h3>
+              </div>
+              
+
+               <div class="card-body">
+               <div class="alert alert-dark alert-dismissible">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+             
+                 Ask KrizBot  Anything. He will use Google Bard with PaLM2 to give to reply using realtime data. 
+                </div>
+               
+              
+                   <div class="form-group">
+                    <label for="exampleInputEmail1">Tone of Reply<span class="form-required">*</span>  <i  data-toggle="tooltip" data-placement="right" title="Tone of reply" class="fa fa-question-circle"></i></label>
+               <select id="selTone" class="form-control">
+                <option value="Professional">Professional</option>
+                   <option value="Humorous">Humorous</option>
+                   <option value="Conversational">Conversational </option>
+                    <option value="Casual">Casual</option>
+                   <option value="Witty">Witty</option>
+                   <option value="Sarcastic">Sarcastic</option>
+                   <option value="Excited">Excited</option>
+                   <option value="Bold">Bold</option>
+                   <option value="Dramatic">Dramatic</option>
+                   <option value="Factual">Factual</option>
+                   <option value="Informative">Informative</option>
+                   <option value="Factual">Factual</option>
+                   <option value="Explanatory">Explanatory</option>
+                   <option value="Masculine">Masculine</option>
+                   <option value="Feminine">Feminine</option>
+   </select>
+    <label for="exampleInputEmail1">Voice of Playback<span class="form-required">*</span>  <i  data-toggle="tooltip" data-placement="right" title="Choose the voice of playback" class="fa fa-question-circle"></i></label>
+                     <select id="selVoices" class="form-control"></select>
+                     </div>
+                         
+                      
+
+                  </div>
+               <div class="card-footer">
+                 <div class="alert alert-danger" id="error" style="display:none" >
+               </div>
+             <button type="submit" data-toggle="tooltip" data-placement="bottom" title="" id="export" class="btn btn-lg btn-dark" data-original-title="Export Chat"><i class="fa fa-download"></i></button>
+             <button type="submit" data-toggle="tooltip" data-placement="bottom" title="" id="clear" class="btn btn-lg btn-dark" data-original-title="Delete Chat"><i class="fa fa-trash"></i></button>
+                </div>
+         
+              </div>
+          </div>
+
+          <div class="col-md-8">
+           
+           <div class="card card-warning card-outline direct-chat direct-chat-info">
+              <div class="card-header">
+                <h3 class="card-title" id="name"><i class="fa-solid fa-robot"></i> KrizBot  AI</h3>
+
+                <div class="card-tools">
+                  <span title="" id="posi" class="badge bg-dark">Bard AI</span>
+                  
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <!-- Conversations are loaded here -->
+                <div id="mssg" class="direct-chat-messages">
+                        <div class='direct-chat-msg'><div class='direct-chat-infos clearfix'><span class='direct-chat-name float-left'>KrizBot </span><span class='direct-chat-timestamp float-right'><a href="#" vall="Hi;  I am KrizBot . How can I assist you today? " class="text-primary play"><i class="fas fa-play-circle"></i></a> </span></div><img class='direct-chat-img' src='img/neo.jpg' alt='Message User Image'><div class='direct-chat-text'>Hi; I am KrizBot . How can i assist you today?  </div> </div>   
+                </div>
+                <!--/.direct-chat-messages-->
+                <span class="character-typing">
+                  <div><b class="wait">Wait,</b> <span>Typing ...</span> </div>
+                </span>
+            
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer">
+                <form id="frm">
+                <input id="hdn_csv" type="hidden" />
+                <input id="hdn_prompt" type="hidden" />
+                <input id="hdn_usr" type="hidden" />
+                  <div class="input-group">
+                    <input type="text" id="txtMsg" name="message" required placeholder="Type Message ..." class="form-control">
+                    <span class="input-group-append">
+                      <button type="button" onclick="createPrompt()" class="btn btn-dark">Ask</button>
+                    </span>
+                  </div>
+                </form>
+              </div>
+              <!-- /.card-footer-->
+            </div>
+
+          </div>
+          </div>
+          </div>
+          </section>
+
+    </div>
+   
+
+
+  </div>
+
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <script src="js/adminlte.min.js" type="text/javascript"></script>
+    <script src="js/speech.js" type="text/javascript"></script>
+   <!-- Bard AI-->
+    <script src="js/Bard.js" type="text/javascript"></script>
+<script>
+function createPrompt()
+{
+
+    var uMsg = $('#txtMsg').val() + ". Tone of reply should be  " + $('#selTone').val();
+if (!$('#frm')[0].checkValidity()) {
+    $('#frm')[0].reportValidity();
+}
+else {
+    message = $("#txtMsg").val();
+    if ($.trim(message) == '') {
+        return false;
+    }
+    // $('.message-input input').val(null);
+    $(".character-typing").css('display', 'flex');
+    $('#mssg').append("<div class='direct-chat-msg right'><div class='direct-chat-infos clearfix'><span class='direct-chat-name float-right'>You</span></div><img class='direct-chat-img' src='img/user1-128x128.jpg' alt='Message User Image'> <div class='direct-chat-text'>" + message + "</div></div>");
+    //scroll to question
+    $('#mssg').stop().animate({
+        scrollTop: $('#mssg')[0].scrollHeight
+    }, 800);
+    Send(uMsg);
+    $("#txtMsg").val('');
+}
+}
+$(window).on('keydown', function (e) {
+    if (e.which == 13) {
+        createPrompt();
+        return false;
+    }
+});
+//New UI controls
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+    </script>
+</body>
+</html>
