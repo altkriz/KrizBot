@@ -1,211 +1,1280 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Kriztech | KrizBot |Bard AI</title>
-    <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="description" content="AI Assistant KrizBot Ask KrizBot Anything. He will use Google Bard with PaLM2 to give to reply using realtime data.">
-  <meta name="keywords" content="HTML, CSS, JavaScript">
-    <meta property="og:image"content="https://altkriz.github.io/KrizBot/img/Favicon.png" />
-    <link rel="icon" type="image/x-icon" href="img/Favicon.png" sizes="128x128">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/adminlte.min.css" rel="stylesheet" type="text/css" />
-    <link href="css/Style.css" rel="stylesheet" type="text/css" />
-  <style>
-  .direct-chat-messages
-  {
-   min-height: 350px;
-    max-height: 350px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-  .direct-chat-text
-{
-    white-space:pre-wrap;
-}
-.direct-chat-infos a
-{
-    font-size:1.2rem;
-}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrizBot </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://pollinations.ai/favicon.png" type="image/png">
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Pulse animation for loading */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        /* Floating animation */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Markdown-like styling */
+        .response-content strong {
+            font-weight: bold;
+        }
+        .response-content em {
+            font-style: italic;
+        }
+        .response-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .response-content ol {
+            list-style-type: decimal;
+            padding-left: 1.5rem;
+        }
+        .response-content a {
+            color: #4f46e5;
+            text-decoration: underline;
+        }
+        .response-content code {
+            background-color: #e5e7eb;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+        }
+        .response-content pre {
+            background-color: #f3f4f6;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 0.5rem 0;
+        }
+        .response-content blockquote {
+            border-left: 4px solid #a5b4fc;
+            padding-left: 1rem;
+            margin-left: 0;
+            color: #4b5563;
+        }
+
+        /* Image styling */
+        .generated-image {
+            max-width: 100%;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Audio player styling */
+        .audio-player {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        /* Recording animation */
+        @keyframes recordingPulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .recording {
+            animation: recordingPulse 1.5s infinite;
+        }
+    </style>
 </head>
-<body onload="OnLoad()" class="hold-transition layout-top-nav">
-<div class="wrapper">
-<!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="img/AILogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
-
-
-
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1><img src="img/kriztech.png"> AI Assistant KrizBot  </h1>
-          </div>
-          <div class="col-sm-6">
-            
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-     <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <!-- left column -->
-          <div class="col-md-4">
-           <div class="card card-warning card-outline">
-              <div class="card-header">
-                <h3 class="card-title"><i class="fa fa-cog"></i> Settings</h3>
-              </div>
-              
-
-               <div class="card-body">
-               <div class="alert alert-dark alert-dismissible">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-             
-                 Ask KrizBot  Anything. He will use Google Bard with PaLM2 to give to reply using realtime data. 
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <header class="flex items-center justify-between mb-8">
+            <div class="flex items-center">
+                <img src="https://pollinations.ai/favicon.png" alt="Pollinations Logo" class="h-12 w-12 mr-4 floating">
+                <div>
+                    <h1 class="text-3xl font-bold text-indigo-700">KrizBot</h1>
+                    <p class="text-gray-600">Multimodal AI assistant powered by Pollinations API</p>
                 </div>
-               
-              
-                   <div class="form-group">
-                    <label for="exampleInputEmail1">Tone of Reply<span class="form-required">*</span>  <i  data-toggle="tooltip" data-placement="right" title="Tone of reply" class="fa fa-question-circle"></i></label>
-               <select id="selTone" class="form-control">
-                <option value="Professional">Professional</option>
-                   <option value="Humorous">Humorous</option>
-                   <option value="Conversational">Conversational </option>
-                    <option value="Casual">Casual</option>
-                   <option value="Witty">Witty</option>
-                   <option value="Sarcastic">Sarcastic</option>
-                   <option value="Excited">Excited</option>
-                   <option value="Bold">Bold</option>
-                   <option value="Dramatic">Dramatic</option>
-                   <option value="Factual">Factual</option>
-                   <option value="Informative">Informative</option>
-                   <option value="Factual">Factual</option>
-                   <option value="Explanatory">Explanatory</option>
-                   <option value="Masculine">Masculine</option>
-                   <option value="Feminine">Feminine</option>
-   </select>
-    <label for="exampleInputEmail1">Voice of Playback<span class="form-required">*</span>  <i  data-toggle="tooltip" data-placement="right" title="Choose the voice of playback" class="fa fa-question-circle"></i></label>
-                     <select id="selVoices" class="form-control"></select>
-                     </div>
-                         
-                      
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">Enhanced</span>
+                <button id="tts-toggle" class="p-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition" title="Toggle TTS Responses">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            </div>
+        </header>
 
-                  </div>
-               <div class="card-footer">
-                 <div class="alert alert-danger" id="error" style="display:none" >
-               </div>
-             <button type="submit" data-toggle="tooltip" data-placement="bottom" title="" id="export" class="btn btn-lg btn-dark" data-original-title="Export Chat"><i class="fa fa-download"></i></button>
-             <button type="submit" data-toggle="tooltip" data-placement="bottom" title="" id="clear" class="btn btn-lg btn-dark" data-original-title="Delete Chat"><i class="fa fa-trash"></i></button>
+        <!-- Main Chat Container -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Chat Header -->
+            <div class="bg-indigo-600 px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 bg-indigo-500 rounded-full flex items-center justify-center text-white mr-3">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h2 class="text-white font-semibold">Multimodal AI Assistant</h2>
                 </div>
-         
-              </div>
-          </div>
-
-          <div class="col-md-8">
-           
-           <div class="card card-warning card-outline direct-chat direct-chat-info">
-              <div class="card-header">
-                <h3 class="card-title" id="name"><i class="fa-solid fa-robot"></i> KrizBot  AI</h3>
-
-                <div class="card-tools">
-                  <span title="" id="posi" class="badge bg-dark">Bard AI</span>
-                  
+                <div class="flex space-x-2">
+                    <button id="settings-btn" class="p-2 rounded-full bg-indigo-500 hover:bg-indigo-700 text-white transition">
+                        <i class="fas fa-cog"></i>
+                    </button>
                 </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <!-- Conversations are loaded here -->
-                <div id="mssg" class="direct-chat-messages">
-                        <div class='direct-chat-msg'><div class='direct-chat-infos clearfix'><span class='direct-chat-name float-left'>KrizBot</span><span class='direct-chat-timestamp float-right'><a href="#" vall="Hi;  I am KrizBot . How can I assist you today? " class="text-primary play"><i class="fas fa-play-circle"></i></a> </span></div><img class='direct-chat-img' src='img/neo.jpg' alt='Message User Image'><div class='direct-chat-text'>Hi; I am KrizBot . How can i assist you today?  </div> </div>   
-                </div>
-                <!--/.direct-chat-messages-->
-                <span class="character-typing">
-                  <div><b class="wait">Wait,</b> <span>Typing ...</span> </div>
-                </span>
-            
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer">
-                <form id="frm">
-                <input id="hdn_csv" type="hidden" />
-                <input id="hdn_prompt" type="hidden" />
-                <input id="hdn_usr" type="hidden" />
-                  <div class="input-group">
-                    <input type="text" id="txtMsg" name="message" required placeholder="Type Message ..." class="form-control">
-                    <span class="input-group-append">
-                      <button type="button" onclick="createPrompt()" class="btn btn-dark">Ask</button>
-                    </span>
-                  </div>
-                </form>
-              </div>
-              <!-- /.card-footer-->
             </div>
 
-          </div>
-          </div>
-          </div>
-          </section>
+            <!-- Settings Panel -->
+            <div id="settings-panel" class="bg-indigo-50 px-6 py-4 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-3">
+                        <h3 class="font-semibold text-indigo-800">General Settings</h3>
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm text-gray-700 mr-2">Dark Mode</label>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input id="dark-mode-toggle" type="checkbox" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm text-gray-700 mr-2">Auto-scroll</label>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input id="auto-scroll-toggle" type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <h3 class="font-semibold text-indigo-800">Voice Settings</h3>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">TTS Voice</label>
+                            <select id="tts-voice" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <option value="alloy">Alloy</option>
+                                <option value="echo">Echo</option>
+                                <option value="fable">Fable</option>
+                                <option value="onyx">Onyx</option>
+                                <option value="nova">Nova</option>
+                                <option value="shimmer">Shimmer</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Chat Messages -->
+            <div id="chat-container" class="h-96 overflow-y-auto p-4 bg-gray-50">
+                <!-- Initial welcome message -->
+                <div id="welcome-message" class="flex mb-4">
+                    <div class="h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 mr-3">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="max-w-xs md:max-w-md lg:max-w-lg bg-indigo-100 rounded-xl p-4">
+                        <p class="text-gray-800">Hello! I'm PolliBot, your multimodal AI assistant powered by Pollinations API. I can generate:</p>
+                        <ul class="list-disc pl-5 mt-2">
+                            <li>Text responses</li>
+                            <li>Images from descriptions</li>
+                            <li>Audio from text (TTS)</li>
+                            <li>Transcribe speech to text</li>
+                        </ul>
+                        <p class="mt-2">What would you like me to help with today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 border-t border-gray-200 bg-white">
+                <!-- Mode Selection -->
+                <div class="flex mb-3 overflow-x-auto pb-2">
+                    <div class="flex space-x-2">
+                        <button data-mode="text" class="mode-btn px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium flex items-center transition">
+                            <i class="fas fa-comment-alt mr-2"></i> Text
+                        </button>
+                        <button data-mode="image" class="mode-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium flex items-center transition hover:bg-gray-300">
+                            <i class="fas fa-image mr-2"></i> Image
+                        </button>
+                        <button data-mode="audio" class="mode-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium flex items-center transition hover:bg-gray-300">
+                            <i class="fas fa-music mr-2"></i> Audio
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Advanced Options -->
+                <div id="text-options" class="options-panel mb-3 grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Model</label>
+                        <select id="text-model" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <option value="openai">OpenAI</option>
+                            <option value="anthropic">Anthropic</option>
+                            <option value="mistral">Mistral</option>
+                            <option value="llama2">Llama 2</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">System Prompt</label>
+                        <input type="text" id="system-prompt" placeholder="Optional" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    </div>
+                    <div class="flex items-end space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="json-response" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <span class="ml-2 text-sm text-gray-700">JSON</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="stream-response" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <span class="ml-2 text-sm text-gray-700">Stream</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Image Options -->
+                <div id="image-options" class="options-panel mb-3 grid grid-cols-1 md:grid-cols-4 gap-3 hidden">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Model</label>
+                        <select id="image-model" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <option value="flux">Flux</option>
+                            <option value="playground-v2">Playground V2</option>
+                            <option value="stable-diffusion">Stable Diffusion</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Width (px)</label>
+                        <input type="number" id="image-width" value="1024" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Height (px)</label>
+                        <input type="number" id="image-height" value="1024" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    </div>
+                    <div class="flex items-end space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="hide-logo" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <span class="ml-2 text-sm text-gray-700">No Logo</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Audio Options -->
+                <div id="audio-options" class="options-panel mb-3 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Action</label>
+                            <div class="flex space-x-2">
+                                <button id="tts-tab" class="audio-action-btn px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium">
+                                    <i class="fas fa-comment-dots mr-2"></i> TTS
+                                </button>
+                                <button id="stt-tab" class="audio-action-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium">
+                                    <i class="fas fa-microphone mr-2"></i> STT
+                                </button>
+                            </div>
+                        </div>
+                        <div id="tts-voice-option">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">TTS Voice</label>
+                            <select id="audio-voice" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <option value="alloy">Alloy</option>
+                                <option value="echo">Echo</option>
+                                <option value="fable">Fable</option>
+                                <option value="onyx">Onyx</option>
+                                <option value="nova" selected>Nova</option>
+                                <option value="shimmer">Shimmer</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button id="record-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium flex items-center transition hover:bg-gray-300 hidden">
+                                <i class="fas fa-microphone mr-2"></i> Record
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Input -->
+                <div class="flex">
+                    <div class="flex-grow relative">
+                        <textarea id="user-input" rows="2" class="w-full px-4 py-3 pr-12 rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 resize-none" placeholder="Type your message here..."></textarea>
+                        <div class="absolute right-3 bottom-3 flex space-x-1">
+                            <button id="send-button" class="p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition" title="Send message">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rate Limit Indicator -->
+        <div class="mt-4 flex items-center justify-center text-sm text-gray-500">
+            <i class="fas fa-clock mr-2"></i>
+            <span id="rate-limit">Rate limit: 1 request per 3 seconds</span>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-8 text-center text-gray-500 text-sm">
+            <p>Powered by <a href="https://pollinations.ai" target="_blank" class="text-indigo-600 hover:underline">Pollinations API</a> • Not affiliated with OpenAI</p>
+            <p class="mt-1">Use responsibly. By using this interface, you agree to comply with Pollinations' terms of service.</p>
+        </footer>
     </div>
-   
 
+    <!-- Audio Recorder UI -->
+    <div id="recording-ui" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Recording Audio</h3>
+            <div class="flex flex-col items-center">
+                <div id="recording-indicator" class="h-24 w-24 bg-red-500 rounded-full flex items-center justify-center text-white mb-4">
+                    <i class="fas fa-microphone text-3xl"></i>
+                </div>
+                <p class="text-gray-600 mb-4">Speak now. Your audio will be transcribed to text.</p>
+                <div class="flex space-x-4">
+                    <button id="stop-recording" class="px-6 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700">
+                        <i class="fas fa-stop mr-2"></i> Stop
+                    </button>
+                    <button id="cancel-recording" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  </div>
-
-    <script src="js/jquery.min.js" type="text/javascript"></script>
-    <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
-    <script src="js/adminlte.min.js" type="text/javascript"></script>
-    <script src="js/speech.js" type="text/javascript"></script>
-   <!-- Bard AI-->
-    <script src="js/Bard.js" type="text/javascript"></script>
-<script>
-function createPrompt()
-{
-
-    var uMsg = $('#txtMsg').val() + ". Tone of reply should be  " + $('#selTone').val();
-if (!$('#frm')[0].checkValidity()) {
-    $('#frm')[0].reportValidity();
-}
-else {
-    message = $("#txtMsg").val();
-    if ($.trim(message) == '') {
-        return false;
-    }
-    // $('.message-input input').val(null);
-    $(".character-typing").css('display', 'flex');
-    $('#mssg').append("<div class='direct-chat-msg right'><div class='direct-chat-infos clearfix'><span class='direct-chat-name float-right'>You</span></div><img class='direct-chat-img' src='img/user1-128x128.jpg' alt='Message User Image'> <div class='direct-chat-text'>" + message + "</div></div>");
-    //scroll to question
-    $('#mssg').stop().animate({
-        scrollTop: $('#mssg')[0].scrollHeight
-    }, 800);
-    Send(uMsg);
-    $("#txtMsg").val('');
-}
-}
-$(window).on('keydown', function (e) {
-    if (e.which == 13) {
-        createPrompt();
-        return false;
-    }
-});
-//New UI controls
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-});
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const chatContainer = document.getElementById('chat-container');
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            const modeButtons = document.querySelectorAll('.mode-btn');
+            const ttsToggle = document.getElementById('tts-toggle');
+            const settingsBtn = document.getElementById('settings-btn');
+            const settingsPanel = document.getElementById('settings-panel');
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const autoScrollToggle = document.getElementById('auto-scroll-toggle');
+            const recordBtn = document.getElementById('record-btn');
+            const recordingUI = document.getElementById('recording-ui');
+            const stopRecordingBtn = document.getElementById('stop-recording');
+            const cancelRecordingBtn = document.getElementById('cancel-recording');
+            const recordingIndicator = document.getElementById('recording-indicator');
+            const ttsTab = document.getElementById('tts-tab');
+            const sttTab = document.getElementById('stt-tab');
+            const audioActionButtons = document.querySelectorAll('.audio-action-btn');
+            let welcomeMessage = document.getElementById('welcome-message');
+            
+            // Options panels
+            const optionPanels = document.querySelectorAll('.options-panel');
+            
+            // Current settings
+            let currentMode = 'text';
+            let currentAudioAction = 'tts'; // 'tts' or 'stt'
+            let ttsEnabled = true;
+            let darkMode = false;
+            let autoScroll = true;
+            let lastRequestTime = 0;
+            let currentRateLimit = 3000; // 3 seconds default
+            let speechSynthesis = window.speechSynthesis;
+            let mediaRecorder;
+            let audioChunks = [];
+            
+            // Voice options
+            const ttsVoice = document.getElementById('tts-voice');
+            const audioVoice = document.getElementById('audio-voice');
+            const ttsVoiceOption = document.getElementById('tts-voice-option');
+            
+            // Initialize the app
+            init();
+            
+            function init() {
+                // Set up initial mode
+                setMode('text');
+                
+                // Set up event listeners
+                setupEventListeners();
+                
+                // Check for dark mode preference
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    toggleDarkMode(true);
+                    darkModeToggle.checked = true;
+                }
+                
+                // Set voice options
+                ttsVoice.value = 'nova';
+                audioVoice.value = 'nova';
+            }
+            
+            function setupEventListeners() {
+                // Mode buttons
+                modeButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const mode = this.dataset.mode;
+                        setMode(mode);
+                    });
+                });
+                
+                // Toggle TTS
+                ttsToggle.addEventListener('click', function() {
+                    ttsEnabled = !ttsEnabled;
+                    if (ttsEnabled) {
+                        this.innerHTML = '<i class="fas fa-volume-up"></i>';
+                        this.classList.remove('bg-gray-200', 'text-gray-700');
+                        this.classList.add('bg-indigo-600', 'text-white');
+                    } else {
+                        this.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                        this.classList.remove('bg-indigo-600', 'text-white');
+                        this.classList.add('bg-gray-200', 'text-gray-700');
+                        // Stop any ongoing speech
+                        if (speechSynthesis) {
+                            speechSynthesis.cancel();
+                        }
+                    }
+                });
+                
+                // Settings button
+                settingsBtn.addEventListener('click', function() {
+                    settingsPanel.classList.toggle('hidden');
+                });
+                
+                // Dark mode toggle
+                darkModeToggle.addEventListener('change', function() {
+                    toggleDarkMode(this.checked);
+                });
+                
+                // Auto-scroll toggle
+                autoScrollToggle.addEventListener('change', function() {
+                    autoScroll = this.checked;
+                });
+                
+                // Send message on button click or Enter key (but allow Shift+Enter for new lines)
+                sendButton.addEventListener('click', sendMessage);
+                userInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+                
+                // Audio tabs
+                ttsTab.addEventListener('click', function() {
+                    setAudioAction('tts');
+                });
+                
+                sttTab.addEventListener('click', function() {
+                    setAudioAction('stt');
+                });
+                
+                // Record button
+                recordBtn.addEventListener('click', startRecording);
+                stopRecordingBtn.addEventListener('click', stopRecording);
+                cancelRecordingBtn.addEventListener('click', cancelRecording);
+                
+                // Voice selection
+                ttsVoice.addEventListener('change', function() {
+                    audioVoice.value = this.value;
+                });
+                
+                audioVoice.addEventListener('change', function() {
+                    ttsVoice.value = this.value;
+                });
+            }
+            
+            function setMode(mode) {
+                currentMode = mode;
+                
+                // Update UI
+                modeButtons.forEach(button => {
+                    if (button.dataset.mode === mode) {
+                        button.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                        button.classList.add('bg-indigo-600', 'text-white');
+                    } else {
+                        button.classList.remove('bg-indigo-600', 'text-white');
+                        button.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                    }
+                });
+                
+                // Show relevant options panel
+                optionPanels.forEach(panel => {
+                    panel.classList.add('hidden');
+                });
+                
+                document.getElementById(`${mode}-options`).classList.remove('hidden');
+                
+                // Update rate limit display
+                if (mode === 'image') {
+                    currentRateLimit = 5000; // 5 seconds for images
+                    document.getElementById('rate-limit').textContent = 'Rate limit: 1 request per 5 seconds';
+                } else {
+                    currentRateLimit = 3000; // 3 seconds for other modes
+                    document.getElementById('rate-limit').textContent = 'Rate limit: 1 request per 3 seconds';
+                }
+                
+                // Update placeholder text
+                switch (mode) {
+                    case 'text':
+                        userInput.placeholder = 'Type your message here...';
+                        break;
+                    case 'image':
+                        userInput.placeholder = 'Describe the image you want to generate...';
+                        break;
+                    case 'audio':
+                        if (currentAudioAction === 'tts') {
+                            userInput.placeholder = 'Enter text to convert to speech...';
+                        } else {
+                            userInput.placeholder = 'Click the Record button to transcribe speech...';
+                        }
+                        break;
+                }
+            }
+            
+            function setAudioAction(action) {
+                currentAudioAction = action;
+                
+                // Update UI
+                audioActionButtons.forEach(button => {
+                    if (button.id === `${action}-tab`) {
+                        button.classList.remove('bg-gray-200', 'text-gray-700');
+                        button.classList.add('bg-indigo-600', 'text-white');
+                    } else {
+                        button.classList.remove('bg-indigo-600', 'text-white');
+                        button.classList.add('bg-gray-200', 'text-gray-700');
+                    }
+                });
+                
+                // Show/hide elements based on action
+                if (action === 'tts') {
+                    ttsVoiceOption.classList.remove('hidden');
+                    recordBtn.classList.add('hidden');
+                    userInput.placeholder = 'Enter text to convert to speech...';
+                } else {
+                    ttsVoiceOption.classList.add('hidden');
+                    recordBtn.classList.remove('hidden');
+                    userInput.placeholder = 'Click the Record button to transcribe speech...';
+                }
+            }
+            
+            async function sendMessage() {
+                const message = userInput.value.trim();
+                
+                // Handle different modes
+                if (currentMode === 'audio' && currentAudioAction === 'stt') {
+                    showError("Please use the Record button for speech-to-text");
+                    return;
+                }
+                
+                if ((currentMode !== 'audio' || currentAudioAction !== 'stt') && (!message || message.length < 2)) {
+                    showError(`Please enter a valid ${currentMode === 'image' ? 'image description' : 'message'} (at least 2 characters)`);
+                    return;
+                }
+                
+                // Check rate limiting
+                const currentTime = Date.now();
+                const timeSinceLastRequest = currentTime - lastRequestTime;
+                
+                if (timeSinceLastRequest < currentRateLimit) {
+                    const remainingTime = Math.ceil((currentRateLimit - timeSinceLastRequest) / 1000);
+                    showError(`Please wait ${remainingTime} second(s) before making another request.`);
+                    return;
+                }
+                
+                // Add user message to chat
+                if (currentMode !== 'audio' || currentAudioAction !== 'stt') {
+                    addMessageToChat('user', message);
+                }
+                
+                // Clear input (unless we're showing "Click Record" message)
+                if (!(currentMode === 'audio' && currentAudioAction === 'stt')) {
+                    userInput.value = '';
+                }
+                
+                // Simulate typing indicator
+                const typingId = showTypingIndicator();
+                
+                try {
+                    // Process based on current mode
+                    switch (currentMode) {
+                        case 'text':
+                            await handleTextGeneration(message, typingId);
+                            break;
+                        case 'image':
+                            await handleImageGeneration(message, typingId);
+                            break;
+                        case 'audio':
+                            if (currentAudioAction === 'tts') {
+                                await handleTextToSpeech(message, typingId);
+                            } else {
+                                // Shouldn't get here as we prevent it above
+                                removeTypingIndicator(typingId);
+                            }
+                            break;
+                        default:
+                            removeTypingIndicator(typingId);
+                            addMessageToChat('assistant', `Mode ${currentMode} would be implemented here.`, false);
+                    }
+                } catch (error) {
+                    removeTypingIndicator(typingId);
+                    showError(`Error: ${error.message}`);
+                }
+            }
+            
+            async function handleTextGeneration(prompt, typingId) {
+                // Get options from UI
+                const model = document.getElementById('text-model').value;
+                const systemPrompt = document.getElementById('system-prompt').value.trim();
+                const jsonResponse = document.getElementById('json-response').checked;
+                const streamResponse = document.getElementById('stream-response').checked;
+                
+                // Build API URL
+                const apiUrl = buildTextApiUrl(prompt, model, systemPrompt, jsonResponse, streamResponse);
+                
+                // Fetch the response
+                lastRequestTime = Date.now();
+                
+                if (streamResponse) {
+                    await handleStreamingResponse(apiUrl, typingId);
+                } else {
+                    const response = await fetch(apiUrl);
+                    
+                    if (!response.ok) {
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+                    
+                    let responseText = await response.text();
+                    
+                    // If JSON was requested, format it nicely
+                    if (jsonResponse) {
+                        try {
+                            const jsonData = JSON.parse(responseText);
+                            responseText = formatJsonResponse(jsonData);
+                        } catch (e) {
+                            responseText = "Received JSON response but couldn't parse it:\n" + responseText;
+                        }
+                    }
+                    
+                    removeTypingIndicator(typingId);
+                    
+                    // Add to chat with processing for markdown-like content
+                    const messageDiv = addMessageToChat('assistant', responseText, false);
+                    
+                    // Text-to-speech if enabled
+                    if (ttsEnabled && !jsonResponse) {
+                        speakText(responseText.replace(/<[^>]*>/g, ''));
+                    }
+                }
+            }
+            
+            async function handleStreamingResponse(apiUrl, typingId) {
+                // Create a message div for the streaming response
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'flex mb-4';
+                messageDiv.innerHTML = `
+                    <div class="h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 mr-3">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div id="streaming-content" class="max-w-xs md:max-w-md lg:max-w-lg bg-indigo-100 rounded-xl p-4">
+                        <div class="response-content"></div>
+                    </div>
+                `;
+                
+                // Remove typing indicator
+                removeTypingIndicator(typingId);
+                
+                // Insert before auto-scrolling
+                chatContainer.appendChild(messageDiv);
+                if (autoScroll) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+                
+                // Handle SSE stream
+                const eventSource = new EventSource(apiUrl);
+                const contentDiv = messageDiv.querySelector('.response-content');
+                
+                eventSource.onmessage = function(event) {
+                    contentDiv.textContent += event.data;
+                    if (autoScroll) {
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    }
+                };
+                
+                eventSource.onerror = function() {
+                    eventSource.close();
+                };
+            }
+            
+            async function handleImageGeneration(prompt, typingId) {
+                // Get options from UI
+                const model = document.getElementById('image-model').value;
+                const width = document.getElementById('image-width').value;
+                const height = document.getElementById('image-height').value;
+                const hideLogo = document.getElementById('hide-logo').checked;
+                
+                // Build API URL
+                const apiUrl = buildImageApiUrl(prompt, model, width, height, hideLogo);
+                
+                // Fetch the response
+                lastRequestTime = Date.now();
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+                
+                const imageBlob = await response.blob();
+                const imageUrl = URL.createObjectURL(imageBlob);
+                
+                removeTypingIndicator(typingId);
+                
+                // Create image message
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'flex mb-4';
+                messageDiv.innerHTML = `
+                    <div class="h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 mr-3">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="max-w-xs md:max-w-md lg:max-w-lg bg-indigo-100 rounded-xl p-4">
+                        <p class="mb-2">Here's the image generated from your prompt:</p>
+                        <img src="${imageUrl}" alt="Generated image from prompt: ${escapeHtml(prompt)}" class="generated-image fade-in">
+                        <p class="mt-2 text-sm text-gray-600">Prompt: "${escapeHtml(prompt)}"</p>
+                    </div>
+                `;
+                
+                // Add to chat
+                chatContainer.appendChild(messageDiv);
+                if (autoScroll) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+            }
+            
+            async function handleTextToSpeech(text, typingId) {
+                // Get voice from UI
+                const voice = audioVoice.value;
+                
+                // Build API URL for GET request (limited to 2000 characters)
+                if (text.length > 2000) {
+                    showError("Text too long for GET request. Use POST instead.");
+                    removeTypingIndicator(typingId);
+                    return;
+                }
+                
+                const apiUrl = buildTtsApiUrl(text, voice);
+                
+                // Fetch the response
+                lastRequestTime = Date.now();
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+                
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                
+                removeTypingIndicator(typingId);
+                
+                // Create audio message
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'flex mb-4';
+                messageDiv.innerHTML = `
+                    <div class="h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 mr-3">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="max-w-xs md:max-w-md lg:max-w-lg bg-indigo-100 rounded-xl p-4">
+                        <p>Audio generated from your text:</p>
+                        <audio controls class="audio-player">
+                            <source src="${audioUrl}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <p class="mt-2 text-sm text-gray-600">"${escapeHtml(text)}"</p>
+                    </div>
+                `;
+                
+                // Add to chat
+                chatContainer.appendChild(messageDiv);
+                if (autoScroll) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+                
+                // Auto-play if TTS is enabled and user hasn't interacted with audio yet
+                if (ttsEnabled) {
+                    setTimeout(() => {
+                        const audioElement = messageDiv.querySelector('audio');
+                        audioElement.play().catch(e => {
+                            console.log("Auto-play prevented:", e);
+                        });
+                    }, 500);
+                }
+            }
+            
+            function buildTextApiUrl(prompt, model, system, json, stream) {
+                const baseUrl = "https://text.pollinations.ai/";
+                const encodedPrompt = encodeURIComponent(prompt);
+                let url = `${baseUrl}${encodedPrompt}`;
+                
+                // Add parameters if they exist
+                const params = [];
+                
+                if (model && model !== 'openai') {
+                    params.push(`model=${model}`);
+                }
+                
+                if (system) {
+                    params.push(`system=${encodeURIComponent(system)}`);
+                }
+                
+                if (json) {
+                    params.push('json=true');
+                }
+                
+                if (stream) {
+                    params.push('stream=true');
+                }
+                
+                if (params.length > 0) {
+                    url += `?${params.join('&')}`;
+                }
+                
+                return url;
+            }
+            
+            function buildImageApiUrl(prompt, model, width, height, hideLogo) {
+                const baseUrl = "https://image.pollinations.ai/prompt/";
+                const encodedPrompt = encodeURIComponent(prompt);
+                let url = `${baseUrl}${encodedPrompt}`;
+                
+                // Add parameters if they exist
+                const params = [];
+                
+                if (model && model !== 'flux') {
+                    params.push(`model=${model}`);
+                }
+                
+                if (width && width !== '1024') {
+                    params.push(`width=${width}`);
+                }
+                
+                if (height && height !== '1024') {
+                    params.push(`height=${height}`);
+                }
+                
+                if (hideLogo) {
+                    params.push('nologo=true');
+                }
+                
+                if (params.length > 0) {
+                    url += `?${params.join('&')}`;
+                }
+                
+                return url;
+            }
+            
+            function buildTtsApiUrl(text, voice) {
+                const baseUrl = "https://text.pollinations.ai/";
+                const encodedText = encodeURIComponent(text);
+                return `${baseUrl}${encodedText}?model=openai-audio&voice=${voice}`;
+            }
+            
+            function formatJsonResponse(jsonData) {
+                // Format the JSON response in a user-friendly way
+                let formatted = '<div class="response-content"><strong>JSON Response:</strong><ul>';
+                
+                for (const [key, value] of Object.entries(jsonData)) {
+                    formatted += `<li><strong>${escapeHtml(key)}</strong>: ${escapeHtml(JSON.stringify(value, null, 2))}</li>`;
+                }
+                
+                formatted += '</ul></div>';
+                return formatted;
+            }
+            
+            function addMessageToChat(sender, message, isImage = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex mb-4 ${sender === 'user' ? 'justify-end' : ''} fade-in`;
+                
+                if (sender === 'user') {
+                    messageDiv.innerHTML = `
+                        <div class="max-w-xs md:max-w-md lg:max-w-lg bg-indigo-600 text-white rounded-xl p-4">
+                            <p class="break-words">${escapeHtml(message)}</p>
+                        </div>
+                        <div class="h-10 w-10 bg-indigo-600 rounded-full flex items-center justify-center text-white ml-3">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    `;
+                } else {
+                    // Check if the message is in our special format (contains class="response-content")
+                    const processedMessage = message.includes('class="response-content"') ? 
+                        message : 
+                        `<div class="response-content">${escapeHtml(message)}</div>`;
+                    
+                    messageDiv.innerHTML = `
+                        <div class="h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 mr-3">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="max-w-xs md:max-w-md lg:max-w-lg bg-indigo-100 rounded-xl p-4">
+                            ${processedMessage}
+                        </div>
+                    `;
+                }
+                
+                // Remove welcome message after first interaction
+                if (welcomeMessage) {
+                    welcomeMessage.remove();
+                    welcomeMessage = null;
+                }
+                
+                chatContainer.appendChild(messageDiv);
+                if (autoScroll) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+                
+                return messageDiv;
+            }
+            
+            function showTypingIndicator() {
+                const typingId = 'typing-' + Date.now();
+                const typingDiv = document.createElement('div');
+                typingDiv.id = typingId;
+                typingDiv.className = 'flex mb-4';
+                typingDiv.innerHTML = `
+                    <div class="h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 mr-3">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="max-w-xs md:max-w-md lg:max-w-lg bg-indigo-100 rounded-xl p-4">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 bg-indigo-400 rounded-full animate-pulse"></div>
+                            <div class="w-3 h-3 bg-indigo-400 rounded-full animate-pulse delay-100"></div>
+                            <div class="w-3 h-3 bg-indigo-400 rounded-full animate-pulse delay-200"></div>
+                        </div>
+                    </div>
+                `;
+                
+                chatContainer.appendChild(typingDiv);
+                if (autoScroll) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+                return typingId;
+            }
+            
+            function removeTypingIndicator(id) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.remove();
+                }
+            }
+            
+            function showError(message) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'flex mb-4 justify-center fade-in';
+                errorDiv.innerHTML = `
+                    <div class="max-w-xs md:max-w-md lg:max-w-lg bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                        <i class="fas fa-exclamation-circle mr-2"></i>${escapeHtml(message)}
+                    </div>
+                `;
+                
+                chatContainer.appendChild(errorDiv);
+                if (autoScroll) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+            }
+            
+            function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+            
+            function speakText(text) {
+                if ('speechSynthesis' in window) {
+                    // Clean text from any HTML tags
+                    const cleanText = text.replace(/<[^>]*>/g, '');
+                    
+                    // Only speak the first 300 characters to avoid long speeches
+                    const speakText = cleanText.substring(0, 300);
+                    
+                    // Cancel any ongoing speech
+                    speechSynthesis.cancel();
+                    
+                    // Create and speak the utterance
+                    const utterance = new SpeechSynthesisUtterance(speakText);
+                    
+                    // Set the voice if available
+                    const voices = speechSynthesis.getVoices();
+                    if (voices.length > 0) {
+                        const preferredVoice = voices.find(v => v.name.includes(ttsVoice.value));
+                        if (preferredVoice) {
+                            utterance.voice = preferredVoice;
+                        }
+                    }
+                    
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+            
+            function toggleDarkMode(enable) {
+                darkMode = enable;
+                if (enable) {
+                    document.body.classList.add('bg-gray-900');
+                    document.body.classList.remove('bg-gray-100');
+                    document.querySelector('.container').classList.add('text-white');
+                    
+                    // Update UI elements
+                    const elements = document.querySelectorAll('.bg-white, .bg-gray-50, .bg-indigo-100');
+                    elements.forEach(el => {
+                        el.classList.remove('bg-white', 'bg-gray-50', 'bg-indigo-100');
+                        el.classList.add('bg-gray-800', 'bg-gray-700', 'bg-indigo-900');
+                    });
+                    
+                    document.querySelectorAll('.text-gray-600, .text-gray-700, .text-gray-800').forEach(el => {
+                        el.classList.remove('text-gray-600', 'text-gray-700', 'text-gray-800');
+                        el.classList.add('text-gray-300', 'text-gray-200', 'text-white');
+                    });
+                    
+                    document.querySelectorAll('.border-gray-200, .border-gray-300').forEach(el => {
+                        el.classList.remove('border-gray-200', 'border-gray-300');
+                        el.classList.add('border-gray-600', 'border-gray-700');
+                    });
+                } else {
+                    document.body.classList.remove('bg-gray-900');
+                    document.body.classList.add('bg-gray-100');
+                    document.querySelector('.container').classList.remove('text-white');
+                    
+                    // Revert UI elements
+                    const elements = document.querySelectorAll('.bg-gray-800, .bg-gray-700, .bg-indigo-900');
+                    elements.forEach(el => {
+                        el.classList.remove('bg-gray-800', 'bg-gray-700', 'bg-indigo-900');
+                        el.classList.add('bg-white', 'bg-gray-50', 'bg-indigo-100');
+                    });
+                    
+                    document.querySelectorAll('.text-gray-300, .text-gray-200, .text-white').forEach(el => {
+                        el.classList.remove('text-gray-300', 'text-gray-200', 'text-white');
+                        el.classList.add('text-gray-600', 'text-gray-700', 'text-gray-800');
+                    });
+                    
+                    document.querySelectorAll('.border-gray-600, .border-gray-700').forEach(el => {
+                        el.classList.remove('border-gray-600', 'border-gray-700');
+                        el.classList.add('border-gray-200', 'border-gray-300');
+                    });
+                }
+            }
+            
+            async function startRecording() {
+                try {
+                    // Request microphone access
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    
+                    // Set up media recorder
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+                    
+                    // Show recording UI
+                    recordingUI.classList.remove('hidden');
+                    recordingIndicator.classList.add('recording');
+                    
+                    // Start recording
+                    mediaRecorder.start();
+                    
+                    // Update record button state
+                    recordBtn.disabled = true;
+                    recordBtn.innerHTML = '<i class="fas fa-microphone-slash mr-2"></i> Recording';
+                    
+                } catch (error) {
+                    showError(`Could not access microphone: ${error.message}`);
+                }
+            }
+            
+            async function stopRecording() {
+                if (!mediaRecorder) return;
+                
+                // Stop recording
+                mediaRecorder.stop();
+                
+                // Close the stream
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                
+                // Hide recording UI
+                recordingUI.classList.add('hidden');
+                recordingIndicator.classList.remove('recording');
+                
+                // Process the audio when recording is complete
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    
+                    // Show typing indicator while processing
+                    const typingId = showTypingIndicator();
+                    
+                    try {
+                        // Convert blob to base64 for the API
+                        const base64Audio = await blobToBase64(audioBlob);
+                        
+                        // Call STT API
+                        const transcription = await transcribeAudio(base64Audio);
+                        
+                        // Remove typing indicator and show result
+                        removeTypingIndicator(typingId);
+                        
+                        // Add user message with the recording
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        
+                        const recordingMessage = document.createElement('div');
+                        recordingMessage.className = 'flex mb-4 justify-end fade-in';
+                        recordingMessage.innerHTML = `
+                            <div class="max-w-xs md:max-w-md lg:max-w-lg bg-indigo-600 text-white rounded-xl p-4">
+                                <p class="mb-2">Audio recording:</p>
+                                <audio controls class="audio-player">
+                                    <source src="${audioUrl}" type="audio/wav">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </div>
+                            <div class="h-10 w-10 bg-indigo-600 rounded-full flex items-center justify-center text-white ml-3">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        `;
+                        
+                        chatContainer.appendChild(recordingMessage);
+                        if (autoScroll) {
+                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                        }
+                        
+                        // Add assistant message with transcription
+                        addMessageToChat('assistant', `I transcribed your recording: "${transcription}"`, false);
+                        
+                        if (ttsEnabled) {
+                            speakText(`You said: ${transcription}`);
+                        }
+                        
+                    } catch (error) {
+                        removeTypingIndicator(typingId);
+                        showError(`Transcription error: ${error.message}`);
+                    }
+                    
+                    // Reset record button
+                    recordBtn.disabled = false;
+                    recordBtn.innerHTML = '<i class="fas fa-microphone mr-2"></i> Record';
+                };
+            }
+            
+            function cancelRecording() {
+                if (!mediaRecorder) return;
+                
+                // Stop recording and discard
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                
+                // Hide recording UI
+                recordingUI.classList.add('hidden');
+                recordingIndicator.classList.remove('recording');
+                
+                // Reset record button
+                recordBtn.disabled = false;
+                recordBtn.innerHTML = '<i class="fas fa-microphone mr-2"></i> Record';
+            }
+            
+            function blobToBase64(blob) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64String = reader.result.split(',')[1];
+                        resolve(base64String);
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+            }
+            
+            async function transcribeAudio(base64Audio) {
+                // In a real implementation, you would call the Pollinations STT API here
+                // For demo purposes, we'll simulate a response
+                
+                // This would be the actual API call:
+                /*
+                const response = await fetch('https://text.pollinations.ai/openai', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: "openai-audio",
+                        messages: [
+                            {
+                                role: "user",
+                                content: [
+                                    { "type": "text", "text": "Transcribe this:" },
+                                    { 
+                                        type: "input_audio",
+                                        input_audio: { 
+                                            data: base64Audio,
+                                            format: "wav" 
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`STT API request failed with status ${response.status}`);
+                }
+                
+                const result = await response.json();
+                return result.choices[0].message.content;
+                */
+                
+                // Simulated response for demo
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // List of possible demo transcriptions
+                const demoTranscriptions = [
+                    "This is a simulated transcription of your audio recording.",
+                    "In a real implementation, this would be the actual text from your speech.",
+                    "The Pollinations API would process your audio and return the transcribed text here.",
+                    "Speech-to-text conversion would happen here if connected to the real API.",
+                    "Your voice input would be converted to text by the AI at this point."
+                ];
+                
+                return demoTranscriptions[Math.floor(Math.random() * demoTranscriptions.length)];
+            }
+            
+            // Load voices when they become available
+            if (speechSynthesis) {
+                speechSynthesis.onvoiceschanged = function() {
+                    // This ensures we have the latest voice list
+                };
+            }
+        });
     </script>
 </body>
-</html>
+</html> 
